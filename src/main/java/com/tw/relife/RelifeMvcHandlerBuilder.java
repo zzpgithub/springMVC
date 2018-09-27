@@ -10,9 +10,17 @@ public class RelifeMvcHandlerBuilder implements RelifeAppHandler{
         if (path == null || method == null || relifeAppHandler == null) {
             throw new IllegalArgumentException();
         }
-        HashMap<RelifeMethod, RelifeAppHandler>  mh= new HashMap<>();
-        mh.put(method, relifeAppHandler);
-        requestActions.put(path, mh);
+        HashMap<RelifeMethod, RelifeAppHandler>  mh;
+
+        if(requestActions.containsKey(path)){
+            mh = requestActions.get(path);
+            if(!mh.containsKey(method))
+                mh.put(method, relifeAppHandler);
+        }else{
+            mh = new HashMap<>();
+            mh.put(method, relifeAppHandler);
+            requestActions.put(path, mh);
+        }
         return this;
     }
 

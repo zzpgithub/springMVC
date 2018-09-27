@@ -2,5 +2,6 @@ package com.tw.relife;
 
 public enum RelifeMethod {
     GET,
-    PUT
+    PUT,
+    POST
 }
