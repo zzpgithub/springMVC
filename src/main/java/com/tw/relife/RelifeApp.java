@@ -1,7 +1,5 @@
 package com.tw.relife;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class RelifeApp implements RelifeAppHandler {
     private final RelifeAppHandler handler;
 
@@ -10,7 +8,6 @@ public class RelifeApp implements RelifeAppHandler {
         if (handler == null) {
             throw new IllegalArgumentException();
         }
-        //throw new NotImplementedException();
         this.handler = handler;
     }
 
@@ -20,14 +17,21 @@ public class RelifeApp implements RelifeAppHandler {
         RelifeResponse response = null;
         try {
              response = handler.process(request);
+             if(response == null){
+                 return new RelifeResponse(200);
+             }
              return response;
-//            handler.process(request);
         } catch (Exception e) {
-            response = new RelifeResponse(500);
-            return response;
-        }
+            RelifeStatusCode annotation = e.getClass().getAnnotation(RelifeStatusCode.class);
+            if(annotation !=null){
+                response = new RelifeResponse(annotation.value());
+                return response;
+            }else
+            {
+                response = new RelifeResponse(500);
+                return response;
+            }
 
-//        return new RelifeResponse(handler.process(request).getStatus());
-        //throw new NotImplementedException();
+        }
     }
 }
