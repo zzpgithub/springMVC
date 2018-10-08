@@ -1,12 +1,12 @@
 package com.tw.relife;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tw.relife.annotations.RelifeController;
 import com.tw.relife.annotations.RelifeRequestMapping;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
 public class RelifeMvcHandlerBuilder implements RelifeAppHandler{
@@ -74,10 +74,6 @@ public class RelifeMvcHandlerBuilder implements RelifeAppHandler{
                         }
                     };
                     addAction(path, relifeMethod, handler);
-//                    RelifeResponse returnResult = method.invoke(controllerClass.newInstance(), );
-//                    HashMap<RelifeMethod, RelifeResponse>  mh = new HashMap<>();
-//                    mh.put(relifeMethod, null );
-//                    actionsController.put(path, mh);
                 }
             }
         }
@@ -90,19 +86,19 @@ public class RelifeMvcHandlerBuilder implements RelifeAppHandler{
         if (controllerClass == null) {
             throw new IllegalArgumentException();
         }
+        if (Modifier.isInterface(controllerClass.getModifiers())
+                || Modifier.isAbstract(controllerClass.getModifiers())) {
+            throw new IllegalArgumentException();
+        }
+        if (!controllerClass.isAnnotationPresent(RelifeController.class)) {
+            throw new IllegalArgumentException();
+        }
+        Method[] methods = controllerClass.getDeclaredMethods();
+        for (Method method : methods) {
+            Annotation declaredAnnotation = method.getDeclaredAnnotation(RelifeRequestMapping.class);
+            if (declaredAnnotation != null && (method.getParameterCount() != 1 || method.getParameterTypes()[0] != RelifeRequest.class)) {
+                throw new IllegalArgumentException();
+            }
+        }
     }
-//    HashMap<String, HashMap<RelifeMethod, RelifeAppHandler>> actionsController = new HashMap<>();
-//
-//    private void add(String path, RelifeMethod method,  RelifeAppHandler relifeAppHandler){
-//        HashMap<RelifeMethod, RelifeAppHandler>  mh;
-//        if(actionsController.containsKey(path)){
-//            mh = actionsController.get(path);
-//            if(!mh.containsKey(method))
-//                mh.put(method, relifeAppHandler);
-//        }else{
-//            mh = new HashMap<>();
-//            mh.put(method, relifeAppHandler);
-//            actionsController.put(path, mh);
-//        }
-//    }
 }
