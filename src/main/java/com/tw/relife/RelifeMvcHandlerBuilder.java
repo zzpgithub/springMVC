@@ -8,11 +8,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class RelifeMvcHandlerBuilder implements RelifeAppHandler{
 
     HashMap<String, HashMap<RelifeMethod, RelifeAppHandler>> requestActions = new HashMap<>();
-    HashMap<String, HashMap<RelifeMethod, RelifeResponse>> actionsController = new HashMap<>();
+    private Set<Class<?>> controllers = new HashSet<>();
 
 
     public RelifeMvcHandlerBuilder addAction(String path, RelifeMethod method, RelifeAppHandler relifeAppHandler) {
@@ -77,13 +79,17 @@ public class RelifeMvcHandlerBuilder implements RelifeAppHandler{
                 }
             }
         }
+        controllers.add(controllerClass);
         return this;
     }
 
 
 
-    private void checkInputFormat(Class controllerClass){
+    private void checkInputFormat(Class<?> controllerClass){
         if (controllerClass == null) {
+            throw new IllegalArgumentException();
+        }
+        if (controllers.contains(controllerClass)) {
             throw new IllegalArgumentException();
         }
         if (Modifier.isInterface(controllerClass.getModifiers())

@@ -24,4 +24,13 @@ public class ExceptionController {
         throw new RuntimeException();
     }
 
+    @RelifeRequestMapping(path = "/test_story6", method = RelifeMethod.GET)
+    public RelifeResponse testStory6(RelifeRequest request) {
+        return new RelifeResponse(200, "test_story6", "text/plain");
+    }
+
+    @RelifeRequestMapping(path = "/test", method = RelifeMethod.GET)
+    public RelifeResponse testSame(RelifeRequest request) {
+        return new RelifeResponse(200, "testExceptionController", "text/plain");
+    }
 }
