@@ -1,5 +1,6 @@
-package com.tw.relife;
+package com.tw.relife.story3;
 
+import com.tw.relife.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,7 +53,7 @@ public class RelifeMvcHandlerTest {
                 request -> new RelifeResponse(200, "Hello", "text/plain"))
                 .build());
     }    @Test
-    void should_test_exception_when_hander_is_null() {
+    void should_test_exception_when_handler_is_null() {
         assertThrows(IllegalArgumentException.class, () -> new RelifeMvcHandlerBuilder().addAction(
                 "/path",
                 RelifeMethod.GET,

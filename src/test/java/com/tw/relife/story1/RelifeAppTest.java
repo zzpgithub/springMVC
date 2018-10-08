@@ -1,5 +1,9 @@
-package com.tw.relife;
+package com.tw.relife.story1;
 
+import com.tw.relife.RelifeApp;
+import com.tw.relife.RelifeMethod;
+import com.tw.relife.RelifeRequest;
+import com.tw.relife.RelifeResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,5 +1,6 @@
-package com.tw.relife;
+package com.tw.relife.story2;
 
+import com.tw.relife.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +13,7 @@ class RelifeExpected{
             throw new SampleNotFoundException();
         });
 
-        RelifeRequest whateverRequest=new RelifeRequest("/any/path",RelifeMethod.GET);
+        RelifeRequest whateverRequest=new RelifeRequest("/any/path", RelifeMethod.GET);
         RelifeResponse response=app.process(whateverRequest);
 
         assertEquals(404, response.getStatus());
