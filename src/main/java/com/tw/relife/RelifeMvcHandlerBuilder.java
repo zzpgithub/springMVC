@@ -1,5 +1,6 @@
 package com.tw.relife;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tw.relife.annotations.RelifeController;
 import com.tw.relife.annotations.RelifeRequestMapping;
 
@@ -70,7 +71,14 @@ public class RelifeMvcHandlerBuilder implements RelifeAppHandler{
                     RelifeAppHandler handler = request -> {
                         try {
                             method.setAccessible(true);
-                            return (RelifeResponse) (method.invoke(controllerClass.newInstance(), request));
+                            Object obj = method.invoke(controllerClass.newInstance(), request);
+                            if (obj == null) {
+                                return null;
+                            }
+                            if (obj.getClass().equals(RelifeResponse.class)) {
+                                return (RelifeResponse) obj;
+                            }
+                            return new RelifeResponse(200, new ObjectMapper().writeValueAsString(obj), "application/json");
                         } catch (InvocationTargetException e) {
                             throw (Exception) e.getCause();
                         }
